@@ -70,4 +70,12 @@ static final int tableSizeFor(int cap) {
 		- HashTable key值不支持null ，其他支持为null
 		- HashTable 是全部都用的synchronized 加锁，而ConcurrentHashMap使用的分段锁，而且在读取value不加锁，用的是Segment锁（其实是一种ReentrantLock锁）
 
+- LinkedList 和 ArrayList
+	- ArrayList查询修改快，LinkedList 增删快
+	- LinkedList 是双向循环链表，也就是具有队列和栈的特性
+![LinkedList][2]
+
+
+
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1489586143029.jpg "1489586143029"
+  [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/1489671672153.jpg "1489671672153"
