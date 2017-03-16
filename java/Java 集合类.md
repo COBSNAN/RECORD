@@ -45,10 +45,12 @@ while (entries.hasNext()) {
 
 
 ## OTHER
+> HashMap 在新版jdk8 中，在数据量大的时候不会采用hash方法哈希key，会采用b-tree，就和现在数据库采用b-tree的原因一样，当数据量过大的时候，hash会造成大多数数据hash值一样，再做偏移处理，反而影响性能。
 
-一般集合的加载因子为0.75
-ArrayList 初始化容量为10
-HashMap 初始化容量为16 即使你初始化的时候指定一个值去初始化容量 其值也不一定是你指定的那个值，其一定是2的幂次方,代码如下
+> 一般集合的加载因子为0.75
+> ArrayList 初始化容量为10
+
+> HashMap 初始化容量为16 即使你初始化的时候指定一个值去初始化容量 其值也不一定是你指定的那个值，其一定是2的幂次方,代码如下
 ```java
 static final int tableSizeFor(int cap) {
         int n = cap - 1;
@@ -61,6 +63,11 @@ static final int tableSizeFor(int cap) {
     }
 ```
  此时22.56 算是写完一篇	:smile:
-
+ 
+ #### 几组区别
+- HashMap 和 HashTable 、ConcurrentHashMap 区别
+		- HashTable和ConcurrentHashMap 是线程安全的，现在主要用 后者
+		- HashTable key值不支持null ，其他支持为null
+		- HashTable 是全部都用的synchronized 加锁，而ConcurrentHashMap使用的分段锁，而且在读取value不加锁，用的是Segment锁（其实是一种ReentrantLock锁）
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1489586143029.jpg "1489586143029"
