@@ -43,6 +43,22 @@ while (entries.hasNext()) {
 - poll() 或 remove() 获取并移除此列表的头
 - offer(4) 将指定元素添加到此列表的末尾
 
+#### TreeMap
+- 如果key不实现比较方法
+
+```java
+TreeMap<User, Object> tMap = new TreeMap<>(new Comparator<User>() {
+			
+			@Override
+			public int compare(User o1, User o2) {
+				// TODO Auto-generated method stub
+				return o1.getAge() == o2.getAge() ?0:(o1.getAge()>o2.getAge()?1:-1);
+			}
+					
+});
+```
+- 如果key实现了Comparable接口 TreeMap 可以不实现Comparator接口，但实现了以它为先。
+
 
 ## OTHER
 > HashMap 在新版jdk8 中，在数据量大的时候不会采用hash方法哈希key，会采用b-tree，就和现在数据库采用b-tree的原因一样，当数据量过大的时候，hash会造成大多数数据hash值一样，再做偏移处理，反而影响性能。
