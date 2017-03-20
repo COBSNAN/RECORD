@@ -17,7 +17,7 @@ private | Y | N | N | N
 **注意** 
 - 上面说的是类的方法属性作用域，default是类属性的默认修饰符。
 - 接口的属性和方法只有public 和default 修饰词。而接口的默认属性是默认是public static final ，方法是public abstract。
-- 类的修饰符只有public和默认不选（表示同包可访问）
+- 新建类的修饰符只有public和默认不选（表示同包可访问），在内部类中可以有其他修饰符
 
 > override 和 overload
 
