@@ -56,3 +56,17 @@ public void setSecond(Date second){
 4. 泛型类不能**实例化类型变量**
 5. 泛型类的静态上下文中类型变量无效，private static T singleInstance; 这是错误的
 6. 不能抛出或捕获泛型类的实例
+
+**注意泛型与Java数组之间的重要区别，数组中可以将子类数组赋给父类数组，而泛型是不可以的，在使用通配符的时候可以赋值。**
+
+**无限定通配符 Pair<?> 和 原始Pair不同**
+```
+? getFirst()
+void setFirst(?)
+```
+> 其中getFirst 的返回值只能赋给一个Object，setFirst方法不能被调用,甚至不能用Object调用。与Pair本质区别在于：可以用任意Object 对象调用原始的Pair类的setObject方法。**可以调用setFirst(null)**
+
+
+### Endding
+
+一切反射方法都是基于泛型来写的。
