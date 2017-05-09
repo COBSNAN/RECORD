@@ -29,7 +29,7 @@ grammar_cjkRuby: true
 ### 依赖注入
 > 帮助应用对象彼此之间保持松散耦合
 
-#### 方式
+### 方式
 1. 构造器注入（不是具体实现或初始化过程）
 
 
@@ -46,3 +46,8 @@ ClassPathXmlApplicationContext context =
 - AnnotationConfigWebApplicationContext: 从一个或多个基于Java的配置类中加载Spring Web应用上下文。
 - FileSystemXmlApplicationContext:从文件系统下的一个或多个XML配置文件中加载上下文定义
 - XmlWebApplicationContext:从Web应用下的一个或多个XML配置文件中加载上下文定义。
+
+### Spring Bean装配三种装配机制
+- XML显示配置
+- Java中显示配置
+- 隐式的bean发现机制和自动装配（用注解来装配）
