@@ -51,3 +51,5 @@ ClassPathXmlApplicationContext context =
 - XML显示配置
 - Java中显示配置
 - 隐式的bean发现机制和自动装配（用注解来装配）
+   - 组件扫描
+   - 自动装配
