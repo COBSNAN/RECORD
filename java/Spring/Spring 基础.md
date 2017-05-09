@@ -35,11 +35,14 @@ grammar_cjkRuby: true
 
 
 Spring通过应用上下文(Application Context)装载bean的定义并把它们组装起来，全权负责对象的创建和组装。Spring自带了多种应用上下文的实现，它们之间主要区别在于如何加载配置。
-- 加载XML文件配置，用ClassPathXmlApplicationContext 来加载。
+- 加载类路径下的XML文件配置，用ClassPathXmlApplicationContext 来加载,可加载一个或多个。
 ```
 ClassPathXmlApplicationContext context = 
         new ClassPathXmlApplicationContext(
             "META-INF/spring/knight.xml");
     Knight knight = context.getBean(Knight.class);
-	```
-	- 
+```
+- AnnotationConfigApplicationContext: 从一个或多个基于Java配置类中加载Spring应用上下文。
+- AnnotationConfigWebApplicationContext: 从一个或多个基于Java的配置类中加载Spring Web应用上下文。
+- FileSystemXmlApplicationContext:从文件系统下的一个或多个XML配置文件中加载上下文定义
+- XmlWebApplicationContext:从Web应用下的一个或多个XML配置文件中加载上下文定义。
