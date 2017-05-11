@@ -62,6 +62,6 @@ ClassPathXmlApplicationContext context =
 
 - JavaConfig 相互引用用 @Import(配置类.class)
 - JavaConfig 引用XML 用@ImportResource("classpath:...")
-- XmlConfig 相互引用 用  <import resource="xxx.xml" />
-- XmlConfig 引用JavaConfig <bean class="java配置类路径" />
+- XmlConfig 相互引用 用 ```<import resource="xxx.xml" />```
+- XmlConfig 引用JavaConfig ```<bean class="java配置类路径" />```
 
