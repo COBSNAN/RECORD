@@ -31,7 +31,7 @@ grammar_cjkRuby: true
 
 ### 方式
 1. 构造器注入（不是具体实现或初始化过程）
-
+2. set方法属性注入
 
 
 Spring通过应用上下文(Application Context)装载bean的定义并把它们组装起来，全权负责对象的创建和组装。Spring自带了多种应用上下文的实现，它们之间主要区别在于如何加载配置。
