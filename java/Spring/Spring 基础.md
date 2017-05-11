@@ -49,7 +49,19 @@ ClassPathXmlApplicationContext context =
 
 ### Spring Bean装配三种装配机制
 - XML显示配置
+  - 注入bean 用ref 注入字面常量 用value  
+  - Setter属性方法注入用 property （简单写法 p:属性名[-ref]=“”），构造器注入用 constructor-arg （现在有一个简单的方法 c:_0-ref="" 等同，功能稍弱点）
 - Java中显示配置
+  - 包含注解：@Configuration，@Bean（默认生成的bean名和方法名是一直的）
 - 隐式的bean发现机制和自动装配（用注解来装配）
    - 组件扫描
    - 自动装配
+   - 所包含的注解：@Configuration,@ComponentScan,@Component（默认生成的bean名是类名的第一个字母变为小写）,@Autowired
+
+> 配置方法的导入混合
+
+- JavaConfig 相互引用用 @Import(配置类.class)
+- JavaConfig 引用XML 用@ImportResource("classpath:...")
+- XmlConfig 相互引用 用  <import resource="xxx.xml" />
+- XmlConfig 引用JavaConfig <bean class="java配置类路径" />
+
