@@ -7,6 +7,18 @@ grammar_cjkRuby: true
 ### profile 
  > 解决不同环境使用不同的配置
 
+#### 源码
+在Spring4中的源码是基于@Conditional和Condition实现的。
+```
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Documented
+@Conditional(ProfileCondition.class)
+public @interface Profile {
+	String[] value();
+}
+```
+
 - java配置文件中可以通过@Profile("xxx") 来进行配置（当然注解配置既可以在类上，也可在方法上。）
 - XML中配置profile
   -  xml文件全部配置可以在beans根节点里配置profile属性
@@ -199,6 +211,22 @@ public class MagicExistsCondition implements Condition {
 getRegistry() | 返回BeanDefinitionRegistry检查bean定义
 getBeanFactory() | 返回ConfigurableListableBeanFactory检查bean是否存在，探查bean的属性
 getEnvironment() | 返回Environmen，在后可以检查某个环境变量是否存在或值是多少。
+getResourceLoader() | 读取并探查所返回的ResourceLoader所加载的资源。
+getClassLoader() | 返回ClassLoader加载并检查类是否存在。
+
+> AnnotatedTypeMetadata接口
+
+*查询注解相关的内容*
+```
+public interface AnnotatedTypeMetadata {
+	boolean isAnnotated(String annotationName);
+	Map<String, Object> getAnnotationAttributes(String annotationName);
+	Map<String, Object> getAnnotationAttributes(String annotationName, boolean classValuesAsString);
+	MultiValueMap<String, Object> getAllAnnotationAttributes(String annotationName);
+	MultiValueMap<String, Object> getAllAnnotationAttributes(String annotationName, boolean classValuesAsString);
+}
+```
+
 
 
 
