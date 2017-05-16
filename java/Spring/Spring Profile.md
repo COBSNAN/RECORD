@@ -227,6 +227,16 @@ public interface AnnotatedTypeMetadata {
 }
 ```
 
+### 自动装配歧义性--> 注解解决
+
+1. 用@Primary 来表示当有歧义时，首选这个bean。这个注解可以用到bean上，亦可以用到注入方法属性上。如果用xml方式配置可以添加个属性（primary="true"）
+2. 用@Qualifier 来限定注入bean的类型。@Qualifier("xxxx") 也是既可以用到bean上，也可以用到注入的方法属性上。
+
+**Java不允许在同一个条目上重复出现相同类型的多个注解**
+
+*在java中也有一个注解类似于@Autowired 是@Resource ，以后会写两者的区别*
+
+
 
 
 
