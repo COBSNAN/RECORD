@@ -232,11 +232,33 @@ public interface AnnotatedTypeMetadata {
 1. 用@Primary 来表示当有歧义时，首选这个bean。这个注解可以用到bean上，亦可以用到注入方法属性上。如果用xml方式配置可以添加个属性（primary="true"）
 2. 用@Qualifier 来限定注入bean的类型。@Qualifier("xxxx") 也是既可以用到bean上，也可以用到注入的方法属性上。
 
-**Java不允许在同一个条目上重复出现相同类型的多个注解**
+**Java8一下版本不允许在同一个条目上重复出现相同类型的多个注解，java8可以有多个注解但注解本身定义的时候必须带有@Repeatable**
 
 *在java中也有一个注解类似于@Autowired 是@Resource ，以后会写两者的区别*
 
 
+
+### bean作用域
+- 单例(Singleton):在整个应用中，只创建一个bean实例，默认作用域
+	- Java配置用 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+	- XML配置在定义bean的时候增加scope="singleton"属性
+- 原型(Prototype):每次注入或者通过Spring应用上下文获取的时候,都会创建一个新的bean实例
+	- Java配置用 @Scope(ConfigurableBeanFactory.SCOPE_PROTOYPE) 来定义
+	- XML配置在定义bean的时候增加scope="prototype"属性
+- 会话(Session):在Web应用中，为每个会话创建一个bean实例
+	- Java配置 @Scope(value=WebApplicationContext.SCOPE_SESSION,proxyMode=ScopedProxyMode.INTERFAXES)
+	- XML配置方式
+	```
+	<bean id="test" class="com.study.test" scope="session">
+		<aop:scoped-proxy/>
+	</bean>
+	```
+- 请求(Request):在Web应用中，为每个请求创建一个bean实例
+	- 这个于上面类型，把session改成REQUEST就可以了
+
+>1. 使用@Scope来定义作用域.
+>2. 单例和原型用 ConfigurableBeanFactory的两个静态常量。
+>3.  会话，请求作用域，注入的时候是用代理实现的，关于proxyMode的选择，当我们注入的是一个接口类型的话，设置成ScopedProxyMode.INTERFAXES，当我们注入的是一个具体的类的话，要设置成ScopedProxyMode.TARGET_CLASS。ScopedProxyMode是一个枚举类型。
 
 
 
