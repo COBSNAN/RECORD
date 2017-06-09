@@ -19,6 +19,9 @@ grammar_cjkRuby: true
 
 ### Spring切点书写方式
 
+> 注解形式的创建切面
+****
+
 > Spring切点支持的AspectJ切点指示器
 ![切点指示器][2]
 > Spring 新引入指示器
@@ -79,7 +82,7 @@ public class TestAnnotationAspect {
         System.out.println("最终通知");  
     }  
   
-    //声明环绕通知  
+    //声明环绕通知，注意环绕通知的写法
     @Around("pointCutMethod()")  
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {  
         System.out.println("进入方法---环绕通知");  
@@ -104,7 +107,21 @@ public class TestAnnotationAspect {
 		}
 	}
 	```
-
+- XML配置方式，需要使用Spring aop 命名空间中的<aop:aspectj-autoproxy>元素来启动代理功能
+	```
+	<?xml version="1.0" encoding="UTF-8"?>  
+	<beans xmlns="http://www.springframework.org/schema/beans"  
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+		   xmlns:aop="http://www.springframework.org/schema/aop"  
+		   xsi:schemaLocation="  
+	http://www.springframework.org/schema/beans   
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+	http://www.springframework.org/schema/aop  
+	http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">  
+	<aop:aspectj-autoproxy/>  
+		<bean  class = "com.spring.aop.TestAnnotationAspect"></bean>  
+	</beans>
+	```
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/QQ%E6%88%AA%E5%9B%BE20170606082814.png "QQ截图20170606082814"
   [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/er.png "er"
