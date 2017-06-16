@@ -122,6 +122,198 @@ public class TestAnnotationAspect {
 		<bean  class = "com.spring.aop.TestAnnotationAspect"></bean>  
 	</beans>
 	```
+	
+	### 在通知中使用参数
+	
+	> Java 配置方式
+
+- 切点
+```
+package aoptest;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class HotData {
+	
+	List<String> hotDatas = Arrays.asList("gao kao", "kkw", "yang mi");
+	
+	public void getDataByOrder(int order){
+		//这里没做越界判断，仅仅是打印热点数据
+		System.out.println(hotDatas.get(order-1));
+	}
+}
+```
+- 切面
+```
+package aoptest;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+
+@Aspect
+public class AspectConfiguration {
+	private Map<Integer, Integer> readCounts = new HashMap<Integer, Integer>();
+	
+	@Pointcut("execution(* aoptest.HotData.getDataByOrder(int)) "+
+	"&& args(dataOrder)")
+	public void readCountCut(int dataOrder){}
+	
+	@Before("readCountCut(dataOrder)")
+	public void readCount(int dataOrder){
+		int readTimes = getReadTimes(dataOrder);
+		readCounts.put(dataOrder, readTimes+1);
+	}
+	
+	public int getReadTimes(int dataOrder) {
+		return readCounts.containsKey(dataOrder)
+			? readCounts.get(dataOrder) :0;
+	}
+}
+
+```
+- 启动切面代理功能和配置类
+```
+package aoptest;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@Configuration
+@EnableAspectJAutoProxy
+public class AspectStart {
+	
+	@Bean
+	public HotData setHotData(){
+		HotData hd = new HotData();
+		return hd;
+	}
+	
+	@Bean
+	public AspectConfiguration setAspectConfiguration(){
+		return new AspectConfiguration();
+	}
+}
+
+```
+- 测试类
+```
+package aoptest;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
+import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=AspectStart.class)
+public class AopTest {
+	//获取系统输出
+	@Rule
+    public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
+
+   /* @Test
+    public void writesTextToSystemOut() {
+        System.out.print("hello world");
+        assertEquals("hello world", systemOutRule.getLog());
+    }*/
+	
+	@Autowired
+	private HotData hotData;
+	
+	@Autowired
+	private AspectConfiguration aConfiguration;
+	
+	@Test
+	public void testAop (){
+		hotData.getDataByOrder(1);
+		hotData.getDataByOrder(2);
+		hotData.getDataByOrder(1);
+		hotData.getDataByOrder(3);
+		hotData.getDataByOrder(2);
+		hotData.getDataByOrder(1);
+		assertEquals(3,aConfiguration.getReadTimes(1));
+		assertEquals(2,aConfiguration.getReadTimes(2));
+		assertEquals(1,aConfiguration.getReadTimes(3));
+		
+	
+	}
+}
+
+```
+- pom.xml 文件
+```
+<dependency>
+       <groupId>org.aspectj</groupId>
+       <artifactId>aspectjweaver</artifactId>
+       <version>1.7.4</version>
+    </dependency>
+
+    <dependency>
+       <groupId>org.aspectj</groupId>
+       <artifactId>aspectjrt</artifactId>
+       <version>1.7.4</version>
+    </dependency>
+    
+    
+    <dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.12</version>
+	</dependency>
+	
+	<dependency>
+	  <groupId>com.github.stefanbirkner</groupId>
+	  <artifactId>system-rules</artifactId>
+	  <version>1.16.0</version>
+	  <scope>test</scope>
+	</dependency>
+```
+*pom文件还包含spring的一些包，没有列出来，这是除spring包的其他包* junit 和 system-rules 注意版本兼容！
+> xml配置方式
+
+就是把java配置去掉注解，不要配置类，下面看下xml配置方式。
+```
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+       xmlns:aop="http://www.springframework.org/schema/aop"  
+       xsi:schemaLocation="  
+http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+http://www.springframework.org/schema/aop  
+http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">  
+      
+    <aop:config>  
+        <!-- 定义切面，命名为 aspectTest-->  
+        <aop:aspect id = "aspectTest" ref = "aspectConfiguration" >  
+        <!-- 定义公共的切入点表达式 -->  
+        <aop:pointcut expression="execution(* aoptest.HotData.getDataByOrder(int)) and args(dataOrder)" id="readCountCut"/>  
+        
+            <aop:before pointcut-ref="readCountCut" method="readCount"/>  
+        </aop:aspect>    
+    </aop:config>  
+    <bean id = "hotData" class = "aoptest.HotData"></bean>  
+    <bean id = "aspectConfiguration" class = "aoptest.AspectConfiguration"></bean>  
+</beans>
+```
+** 大家发现，不管是xml和java配置，都定义了hotData bean，我们发现它只用于测试类，如果我们不用测试类，是不是可以去掉**
+> 答案是否定的，aop监听的package下，必须用ioc容器管理，才会有监听的效果。HotData hotData = new HotData();
+是不会有aop的监听事件触发
+
+
+
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/QQ%E6%88%AA%E5%9B%BE20170606082814.png "QQ截图20170606082814"
   [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/er.png "er"
