@@ -19,10 +19,8 @@ grammar_cjkRuby: true
 
 ### Spring切点书写方式
 
-> 注解形式的创建切面
-****
-
 > Spring切点支持的AspectJ切点指示器
+
 ![切点指示器][2]
 > Spring 新引入指示器
 
@@ -33,7 +31,7 @@ execution( * com.cobs.test..*(..)) || within(com.hello.service.*)
 ```
 *这个切点表达式表示 匹配test包下的所有方法或service包下的所有方法*
 
-在例子中我们使用**||**【or】来连接指示器，相应的还可以使用**&&【and】** 和**！【not】**来进行连接指示器。
+在例子中我们使用 ||【or】来连接指示器，相应的还可以使用 &&【and】 和 !【not】来进行连接指示器。
 
 ### 创建切面
 
@@ -123,9 +121,9 @@ public class TestAnnotationAspect {
 	</beans>
 	```
 	
-	### 在通知中使用参数
+### 在通知中使用参数
 	
-	> Java 配置方式
+> Java 配置方式
 
 - 切点
 ```
@@ -312,8 +310,152 @@ http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 > 答案是否定的，aop监听的package下，必须用ioc容器管理，才会有监听的效果。HotData hotData = new HotData();
 是不会有aop的监听事件触发
 
+### 通过切面引入新的功能方法
+
+> java 配置方式
+
+- 新方法配置类
+```
+package aopinject;
+
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.DeclareParents;
+import org.springframework.stereotype.Component;
+
+@Aspect
+@Component
+public class MyAspect {
+	@DeclareParents(value="aopinject.UserService", 
+			defaultImpl=aopinject.BasicVerifier.class)
+	public Verifier verifer;
+}
+```
+- java配置类
+```
+package aopinject;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+
+@Configuration
+@ComponentScan
+@EnableAspectJAutoProxy
+public class JavaConfig {
+	
+}
+```
+- 切入功能方法类
+
+```
+//接口
+package aopinject;
+public interface Verifier {
+	public boolean validate(User user);
+}
+
+//实现类
+package aopinject;
+public class BasicVerifier implements Verifier {
+	public boolean validate(User user) {
+		if(user.getUsername().equals("jack") && user.getPassword().equals("1234")) {
+			return true;
+		}
+		return false;
+	}
+}
+```
+- 切点
+```
+package aopinject;
+
+import org.springframework.stereotype.Component;
+@Component("service")
+public class UserService {
+	public void serve(User user) {
+		System.out.println(user.toString());
+	}
+}
+```
+- 测试类
+```
+package aopinject;
 
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=JavaConfig.class)
+public class AopInjectTest {
+	
+	@Autowired
+	private UserService userService;
+	
+	@Test
+	public void testAopInject (){
+		User user1 = new User();
+		user1.setUsername("jack");
+		user1.setPassword("1234");
+		
+		User user2 = new User();
+		user2.setUsername("haha");
+		user2.setPassword("123456");
+		
+		Verifier v = (Verifier) userService;
+		
+		if(v.validate(user1)) {
+			System.out.println("user1验证成功");
+			userService.serve(user1);
+		}
+		if(v.validate(user2)) {
+			System.out.println("user2验证成功");
+			userService.serve(user2);
+		}
+	
+	}
+}
+
+```
+**结果**
+![执行结果][3]
+
+> xml配置方式
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:aop="http://www.springframework.org/schema/aop"  
+       xsi:schemaLocation="  
+http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://www.springframework.org/schema/context   
+http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+http://www.springframework.org/schema/aop  
+http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">  
+      
+    <context:component-scan base-package="aopinject"/>
+	<aop:aspectj-autoproxy/>
+	<aop:config>   
+		<aop:aspect>
+			<aop:declare-parents types-matching="aopinject.UserService"
+				implement-interface="aopinject.Verifier"
+				default-impl="aopinject.BasicVerifier" />
+		</aop:aspect>
+	</aop:config>
+	<!-- delegate-ref="" 这个替换default-impl ，指定的是BasicVerifier的bean Id-->
+</beans>
+```
+> @DeclareParents注解
+
+- value属性指定了哪种类型的bean要引入该接口
+- defaultImpl属性指定了为引入功能提供实现的类
+- @DeclareParents注解所标注的属性指明了要引入了接口
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/QQ%E6%88%AA%E5%9B%BE20170606082814.png "QQ截图20170606082814"
   [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/er.png "er"
+  [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1498003041643.jpg
