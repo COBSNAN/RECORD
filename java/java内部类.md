@@ -124,7 +124,17 @@ public class methodInnerClass {
 ### 匿名内部类
 
 > 匿名内部类就是没有名字的内部类。这是Java为了方便程序员编写程序，而设计的一个机制。
-> 使用场景
 
+**使用场景**
 - 类的一个实例。·类在定义后马上用到。
 - 类非常小
+
+**格式**
+new 类名(){方法定义};
+```
+new Thread(){
+    public void run(){
+    //do something
+    };
+}.start();
+```
