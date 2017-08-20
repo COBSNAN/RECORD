@@ -58,11 +58,11 @@ HOPS 值，目的是不用每次都使用CAS更新，表示tail和尾节点的�
 移除方法 | remove() | poll() | take() | poll(time,unit)
 检查方法 | element() | peek() | 不可用 | 不可用、
 
-- ArrayBlockingQueue:一个由数组结构组成的有界阻塞队列
-- LinkedBlockingQueue:一个由链表结构组成的有界阻塞队列
-- PriorityBlockingQueue:一个支持优先级排序的无界阻塞队列
-- SynchronousQueue:一个不储存元素的阻塞队列
-- DelayQueue:一个使用优先级队列实现的无界阻塞队列
-- LinkedTransferQueue:一个由链表结构组成的无界阻塞队列
-- LinkedBlockingDeque:一个由链表结构组成的双向阻塞队列
+- ArrayBlockingQueue:一个由数组结构组成的有界阻塞队列。先进先出的原则对元素进行排序
+- LinkedBlockingQueue:一个由链表结构组成的有界阻塞队列。默认最大长度Integer.MAX_VALUE
+- PriorityBlockingQueue:一个支持优先级排序的无界阻塞队列.元素默认排序采用自然顺序升序排列。可以元素自定义compareTo()方法或构造参数Comparator来对元素进行排序
+- SynchronousQueue:一个不储存元素的阻塞队列。每一个put操作必须等待一个take操作。
+- DelayQueue:一个使用优先级队列实现的无界阻塞队列。只有在延迟期满时才能从队列中提取元素。
+- LinkedTransferQueue:一个由链表结构组成的无界阻塞队列。多了tryTransfer和transfer方法。transfer方法当有消费者正在等待接受元素时，transfer方法会把生产者立刻给消费者，并等待**该元素被消费了才返回**。tryTransfer方法是当没有等待消费者，直接返回false，否则返回true。
+- LinkedBlockingDeque:一个由链表结构组成的双向阻塞队列，就是双向队列，可以两头插入删除
 
