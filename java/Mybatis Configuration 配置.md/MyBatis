@@ -1,0 +1,75 @@
+---
+title: Mybatis Configuration 配置
+tags: java
+grammar_cjkRuby: true
+---
+
+### Configuration 作用
+- 读入配置文件，包括基础配置的XML文件和映射器的XML文件。
+- 初始化基础配置，比如Mybatis的别名等，一些重要的类对象，例如，插件、映射器、ObjectFactory 和typeHandler对象。
+- 提供单例，为后续创建SessionFactory 服务并提供配置的参数
+- 执行一些重要的对象方法，初始化配置信息。
+
+![enter description here][1]
+
+### Configuration 包含的元素详解
+
+> properties 元素是一个配置属性的元素
+
+- property子元素
+
+![enter description here][2]
+- properties配置文件
+
+![enter description here][3]
+- 程序参数传递
+
+```
+package mybatistest;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import java.io.InputStream;
+/**
+ * Created by dida on 2017/8/17.
+ */
+public class mybatistest {
+    public static void main(String[] args){
+        String resource ="mybatis-config.xml";
+        try{
+            //SqlSessionFactoryBuilder 创建sqlSessionFactory ，然后声明周期就结束了
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            SqlSessionFactory sqlSessionFactory = null;
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        }catch (Exception e){}
+    }
+}
+```
+
+**如果这三种方式都配置的话，其优先级是倒着过来了，因为MyBatis加载顺序是从属性->文件->方法参数，而属性是会被覆盖掉的，所以优先级就倒过来了**
+
+> setting 设置
+设置参数 | 描述 | 有效值 | 默认值
+cacheEnabled | 该配置影响所有映射器中配置的缓存全局开关 | true、false | true
+lazyLoadingEnabled | 延迟加载的全局开关。当它开启时，所有关联对象都会延迟加载。特定关联关系中可以通过设置fetchType属性来覆盖该项的开关状态 | true、false | false
+aggressiveLazyLoading | 当启用时，对任意延迟属性的调用会使带有延迟加载属性的对象完整加载。反之，每种属性将会按需加载 | true、false | true
+multipleResultSetsEnabled | 是否允许单一语句返回多结果集（需要兼容驱动）|true、false | true
+userColumnLabel | 使用列标签代替列名。不同的驱动在这方面会有不同的表现，具体可参考相关驱动文档或通过测试|true、false | true
+useGeneratedKeys | 允许JDBC支持自动生成主键，需要驱动兼容。如果设置为true，则这个设置强制使用自动生成主键，尽管一些驱动不能兼容但仍可正常工作|true、false | false
+autoMappingBehavior|指定MyBatis应如何自动映射列到字段或属性。NONE表示取消自动映射；PAPRIAL只会自动映射没有定义嵌套结果集映射的结果集；FULL会自动映射任意复杂的结果集（无论是否嵌套）|NONE、PAPTIAL、FULL|PARTIAL
+defaultExecutorType | 配置默认的执行器。SIMPLE是普通的执行器；REUSE执行器会重用预处理语句（prepared statements）；BATCH执行器将重用语句并执行批量更新|SIMPLE、REUSE、BATCH|SIMPLE
+defaultStatementTimeout|设置超时时间，它决定驱动等待数据库响应的秒数。当没有设置的时候它取的就是驱动默认的时间|Any positive integer |Not set(null)
+safeRowBoundsEnabled|运行在嵌套语句中使用分页(RowBounds)|true、false | false
+mapUnderscoreToCamelCase|是否开启自动驼峰命名规则(camel case)映射，即从经典数据库列名A_COLUMN 到经典Java属性名aColumn的类似映射|true、false | false
+localCacheScope|MyBatis利用本地缓存机制(Local Cache)防止循环引用(circular references)和加速重复嵌套查询。默认值为SESSION,这种情况下会缓存一个会话中执行的所有查询。若设置值为STATEMENT，本地会话仅用在语句执行上，对相同SqlSession的不同调用将不会共享数据 | SESSION、STATEMENT |SESSION
+jdbcTypeForNull | 当没有参数提供特定的JDBC类型时，为空值指定JDBC类型。某些驱动需要指定列的JDBC类型，多数情况直接用一般类型即可，比如NULL、VARCHAR、OTHER|JdbcType枚举，最常见的是NULL、VARCHAR和OTHER|OTHER
+```
+<settings>
+	<setting name="cacheEnabled" value="true" />
+	<setting name="lazyLoadingEnabled" value="true" />
+</settings>
+```
+
+  [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503444647407.jpg
+  [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445687812.jpg
+  [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445724983.jpg
