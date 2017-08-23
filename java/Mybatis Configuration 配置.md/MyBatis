@@ -49,7 +49,9 @@ public class mybatistest {
 **如果这三种方式都配置的话，其优先级是倒着过来了，因为MyBatis加载顺序是从属性->文件->方法参数，而属性是会被覆盖掉的，所以优先级就倒过来了**
 
 > setting 设置
+> 
 设置参数 | 描述 | 有效值 | 默认值
+--- | --- | --- | --
 cacheEnabled | 该配置影响所有映射器中配置的缓存全局开关 | true、false | true
 lazyLoadingEnabled | 延迟加载的全局开关。当它开启时，所有关联对象都会延迟加载。特定关联关系中可以通过设置fetchType属性来覆盖该项的开关状态 | true、false | false
 aggressiveLazyLoading | 当启用时，对任意延迟属性的调用会使带有延迟加载属性的对象完整加载。反之，每种属性将会按需加载 | true、false | true
@@ -77,6 +79,15 @@ proxyFactory | 指定MyBatis创建具有延迟加载能力的对象所用到的�
 </settings>
 ```
 
+> 别名设置
+
+系统别名
+![系统别名][4]
+![系统别名][5]
+
+
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503444647407.jpg
   [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445687812.jpg
   [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445724983.jpg
+  [4]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503489606114.jpg
+  [5]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503489639452.jpg
