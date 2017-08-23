@@ -63,6 +63,13 @@ safeRowBoundsEnabled|运行在嵌套语句中使用分页(RowBounds)|true、fals
 mapUnderscoreToCamelCase|是否开启自动驼峰命名规则(camel case)映射，即从经典数据库列名A_COLUMN 到经典Java属性名aColumn的类似映射|true、false | false
 localCacheScope|MyBatis利用本地缓存机制(Local Cache)防止循环引用(circular references)和加速重复嵌套查询。默认值为SESSION,这种情况下会缓存一个会话中执行的所有查询。若设置值为STATEMENT，本地会话仅用在语句执行上，对相同SqlSession的不同调用将不会共享数据 | SESSION、STATEMENT |SESSION
 jdbcTypeForNull | 当没有参数提供特定的JDBC类型时，为空值指定JDBC类型。某些驱动需要指定列的JDBC类型，多数情况直接用一般类型即可，比如NULL、VARCHAR、OTHER|JdbcType枚举，最常见的是NULL、VARCHAR和OTHER|OTHER
+lazyLoadTriggerMethods | 指定对象的方法触发一次延迟加载 | 如果是一个方法列表,用逗号隔开|equals,clone,hashCode,toString
+defaultScriptingLanguage | 指定动态SQL生成的默认语言 |配置类的别名或者类的全限定名 |org.apache.ibatis.scripting.xmltags.XMLDynamicLanguageDriver
+callSettersOnNulls|指定当结果集中值为null的时候是否调用映射对象的setter(map对象时为put)方法，这对于有Map.keySet()依赖或null值初始化的时候是有用的。注意基本类型不能设置成null。|true、false | false
+logPrefix | 指定Mybatis增加到日志名称的前缀 | 任何字符串|没有设置
+logImpl | 指定Mybatis所用日志的具体实现，未指定时将自动查找 | SLF4J、LOG4J、LOG4J2、JDK_LOGGING、COMMONS_LOGGING、STDOUT_LOGGING、NO_LOGGING|没有设置
+proxyFactory | 指定MyBatis创建具有延迟加载能力的对象所用到的代理工具 |CGLIB、JAVASSIST|版本3.3.0(含)以上JAVASSIST,否则CGLIB
+
 ```
 <settings>
 	<setting name="cacheEnabled" value="true" />
