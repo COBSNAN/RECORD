@@ -114,8 +114,28 @@ public class User{}
 </typeHandlers>
 ```
 - 编写自定义typeHandler，需要实现TypeHandler 或继承BaseTypeHandler 。还需要通过@MappedTypes({String.class})和@MappedJdbcTypes(JdbcType.VARCHAR) 来在类上进行注解
-- 对所需要的属性配置typeHandler，有三种方式
+- 对所需要的属性配置typeHandler
 	- 在resultMap 定义转换的时候，通过typeHandler 定义
+	- 在使用的时候比如查询的时候字节定义typeHandler
+
+> ObjectFactory
+
+编写自定义的ObjectFactory，需要实现ObjectFactory接口。
+> environments配置环境
+
+![environments][8]
+	- environments 中的属性default，标明在缺省的情况下，我们将启用那个数据源配置
+	- environment元素时配置一个数据源的开始，id是数据源标志
+		- transactionManager配置数据库事务
+			- JDBC,采用JDBC方式管理事务
+			- MANAGED 采用容器方式管理事务，在JNDI数据源中常用
+			- 自定义
+		- property元素配置数据源各类属性
+		- dataSource配置数据源连接信息，type属性是对数据库连接方式的配置
+			- UNPOOLED 非连接池数据库
+			- POOLED 连接池数据库
+			- JNDI JNDI数据源
+			- 自定义数据源
 
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503444647407.jpg
@@ -125,3 +145,4 @@ public class User{}
   [5]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503489639452.jpg
   [6]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503531878858.jpg
   [7]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503531910485.jpg
+  [8]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503533376017.jpg
