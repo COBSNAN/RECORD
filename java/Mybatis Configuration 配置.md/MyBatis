@@ -138,6 +138,20 @@ public class User{}
 			- 自定义数据源
 
 
+> 映射器配置
+
+- 用文件路径引入映射器
+![enter description here][9]
+- 用包名引入映射器
+![enter description here][10]
+ 
+-  用类注册引入映射器
+![enter description here][11]
+- 用userMapper.xml 引入映射器
+![enter description here][12]
+ 
+
+
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503444647407.jpg
   [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445687812.jpg
   [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445724983.jpg
@@ -146,3 +160,7 @@ public class User{}
   [6]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503531878858.jpg
   [7]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503531910485.jpg
   [8]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503533376017.jpg
+  [9]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503533984111.jpg
+  [10]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503533992376.jpg
+  [11]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503534000995.jpg
+  [12]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503534007891.jpg
