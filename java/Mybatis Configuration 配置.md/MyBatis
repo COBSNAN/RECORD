@@ -85,9 +85,37 @@ proxyFactory | 指定MyBatis创建具有延迟加载能力的对象所用到的�
 ![系统别名][4]
 ![系统别名][5]
 - 自定义别名
+```
+<typeAliases>
+	<!-- 直接定义别名-->
+	<typeAlias alias="user" type="com.study.entity.User"/>
+	<!-- 通过自动扫描包自定义别名,包下的类需要使用@Alias注解-->
+	<package name="com.study.entity"/>
+</typeAliases>
+```
+包下的类
+```
+@Alias("user")
+public class User{}
+```
+> typeHandler类型处理器
 
+其注册是在org.apache.ibatis.TypeHandlerRegistry中类通过register来进行注册的，下面列出一些系统默认注册的typeHandler。
 
+![typeHandler类型处理器][6]
+![typeHandler类型处理器][7]
 
+简单的说下自定义typeHandler
+- 首先需要注册自定义typeHandler
+```
+<typeHandlers>
+	<typeHandler jdbcType="VARCHAR" javaType="string" handler="com.study.testhandler.MytestTypeHandler"/>
+	<package name="com.study.testhandler"/>
+</typeHandlers>
+```
+- 编写自定义typeHandler，需要实现TypeHandler 或继承BaseTypeHandler 。还需要通过@MappedTypes({String.class})和@MappedJdbcTypes(JdbcType.VARCHAR) 来在类上进行注解
+- 对所需要的属性配置typeHandler，有三种方式
+	- 在resultMap 定义转换的时候，通过typeHandler 定义
 
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503444647407.jpg
@@ -95,3 +123,5 @@ proxyFactory | 指定MyBatis创建具有延迟加载能力的对象所用到的�
   [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503445724983.jpg
   [4]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503489606114.jpg
   [5]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503489639452.jpg
+  [6]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503531878858.jpg
+  [7]: https://www.github.com/COBSNAN/ImageHub/raw/master/1503531910485.jpg
