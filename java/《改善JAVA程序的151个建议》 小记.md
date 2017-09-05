@@ -65,7 +65,7 @@ grammar_cjkRuby: true
 
 ### Arrays.asList 形成的arrayList 是Array工具类中的一个内置类，和我们常用的ArrayList集合类不一样。add方法不可使用
  
-### 不同的列表选择不同的遍历方式，如：ArrayList 直接用get序号xuanqu，如果是LinkedList 就用foreach 用法（foreach 会自动创建元素之间的关系，所以在无序的ArrayList使用会效率特别低）
+### 不同的列表选择不同的遍历方式，如：ArrayList 直接用get序号选取，如果是LinkedList 就用foreach 用法（foreach 会自动创建元素之间的关系，所以在无序的ArrayList使用会效率特别低）
 
 ### 判断集合相等时只需关注元素是否相等即可
 
