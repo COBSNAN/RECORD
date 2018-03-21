@@ -1,6 +1,6 @@
 ---
 title: MySQL explain执行计划
-tags: java
+tags: mysql
 grammar_cjkRuby: true
 ---
 ![enter description here][1]
