@@ -69,7 +69,8 @@ Not exists | 使用not exists 来优化查询
 
 ![ref 非唯一性索引扫描][5]
 
-
+> eq_ref 唯一性索引扫描
+![eq_ref 唯一性索引扫描][6]
 
 ### 关于MySQL执行计划的局限性
 
@@ -96,3 +97,4 @@ Not exists | 使用not exists 来优化查询
   [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521673827114.jpg
   [4]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521674024993.jpg
   [5]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521674318465.jpg
+  [6]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521675720850.jpg
