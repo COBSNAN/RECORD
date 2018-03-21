@@ -51,5 +51,23 @@ Using temporary | （表示MySQL需要使用临时表来存储结果集，常见
 Distinct |优化distinct操作，在找到第一个匹配元组后既停止找同样值得动作
 Not exists | 使用not exists 来优化查询
 
+### 关于MySQL执行计划的局限性
+
+1. EXPLAIN不会告诉你关于触发器、存储过程的信息或用户自定义函数对查询的影响情况
+2. EXPLAIN不考虑各种Cache
+3. EXPLAIN不能显示MySQL在执行查询时所作的优化工作
+4. 部分统计信息是估算的，并非精确值
+5. EXPALIN只能解释SELECT操作，其他操作要重写为SELECT后查看。
+
+### 备注
+
+> filesort是通过相应的排序算法,将取得的数据在内存中进行排序。
+
+> MySQL需要将数据在内存中进行排序，所使用的内存区域也就是我们通过sort_buffer_size 系统变量所设置的排序区。这个排序区是每个Thread 独享的，所以说可能在同一时刻在MySQL 中可能存在多个 sort buffer 内存区域。
+
+
+**在MySQL中filesort 的实现算法实际上是有两种**
+- 双路排序：是首先根据相应的条件取出相应的排序字段和可以直接定位行数据的行指针信息，然后在sort buffer 中进行排序。
+- 单路排序：是一次性取出满足条件行的所有字段，然后在sort buffer中进行排序
 
   [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521643429078.jpg
