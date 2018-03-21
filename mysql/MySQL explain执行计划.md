@@ -51,6 +51,26 @@ Using temporary | （表示MySQL需要使用临时表来存储结果集，常见
 Distinct |优化distinct操作，在找到第一个匹配元组后既停止找同样值得动作
 Not exists | 使用not exists 来优化查询
 
+### 例子
+
+> 全表扫描 由于name没有索引所以走的是全表扫描，注意Extra里的含义
+
+![全表扫描][2]
+
+> 扫描全部索引树
+
+![扫描全部索引树][3]
+
+> range扫描部分索引
+
+![range扫描部分索引][4]
+
+> ref 非唯一性索引扫描 和const
+
+![ref 非唯一性索引扫描][5]
+
+
+
 ### 关于MySQL执行计划的局限性
 
 1. EXPLAIN不会告诉你关于触发器、存储过程的信息或用户自定义函数对查询的影响情况
@@ -70,4 +90,9 @@ Not exists | 使用not exists 来优化查询
 - 双路排序：是首先根据相应的条件取出相应的排序字段和可以直接定位行数据的行指针信息，然后在sort buffer 中进行排序。
 - 单路排序：是一次性取出满足条件行的所有字段，然后在sort buffer中进行排序
 
-  [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521643429078.jpg
+
+  [1]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521672793513.jpg
+  [2]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521672924508.jpg
+  [3]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521673827114.jpg
+  [4]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521674024993.jpg
+  [5]: https://www.github.com/COBSNAN/ImageHub/raw/master/1521674318465.jpg
