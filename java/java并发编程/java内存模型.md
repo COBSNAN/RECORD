@@ -20,3 +20,6 @@ grammar_cjkRuby: true
 | 屏障类型          | 指令示例             | 说明                                                     |
 | ----------------- | -------------------- | -------------------------------------------------------- |
 | LoadLoad Barriers | Load1;LoadLoad;Load2 | 确保 Load1 数据的装载先于 Load2 及所有后续装载指令的装载 |
+| StoreStore Barriers | Store1;StoreStore;Store2 |确保Store1数据对其他处理器可见（刷新到内存）先于Store2及所有后续存储指令的存储 |
+| LoadStore Barriers | Load1;LoadStore;Store2 | 确保Load1数据装载先于Store2及所有后续的存储指令刷新到内存 | 
+| StoreLoad Barriers | Store1;StoreLoad;Load2 | 确保Store1数据对其他处理器变得可见（指刷新到内存）先于Load2及所有后续装载指令的装载。StoreLoad Barriers 会使该屏障之前的所有内存访问指令（存储和装载指令）完成之后，才执行该屏障之后的内存访问指令
