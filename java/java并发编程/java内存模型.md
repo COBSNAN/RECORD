@@ -70,3 +70,62 @@ volatile 写|-   | NO | NO
 - 利用volatile变量的写-读所具有的内存语义
 - 利用CAS所附带的volatile读和volatile写的内存语义
 
+
+### final域内存规则语义
+
+>final域的重排序规则
+
+- 在构造函数内对一个final域的写入，与随后把这个构造对象的引用赋值给一个引用变量，这两个操作之间不能冲排序
+- 初次读一个包含final域的对象的引用，与随后初次读这个final域，这两个操作之间不能重排序
+- 对应**引用类型**，在构造函数内对一个final引用的对象的成员域的写入，与随后在构造函数外把这个被构造对象的引用赋值给一个引用变量，这两个操作不能重排序
+
+### happens-before规则
+
+1. 程序顺序规则：一个线程中的每个操作，happens-before于该线程中的任意后续操作
+2. 监视器锁规则：对一个锁的解锁，happens-before于随后对这个锁的加锁
+3. volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读
+4. 传递性：如果A happens-before B，且B happens-before C，那么A happens-before C。
+5. start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A 线程的ThreadB.start()操作happens-before 于线程B中的任意操作。
+6. join()规则：如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before 于线程A 从ThreadB.join()操作成功返回。
+
+### 延迟初始化
+
+> 双重检查volatile锁定
+
+```
+public class SafeDoubleCheckedLocking {
+    
+    //不加volatile是不安全的，因为一个对象的创建不是原子性的，有可能存在刚分配完对象地址，还没赋值
+    private volatile static Student student;
+    
+    public static Student getStuInstance(){
+        if (student == null){
+            synchronized (SafeDoubleCheckedLocking.class){
+                if (student == null){
+                    student = new Student();
+                }
+            }
+        }
+        return student;
+    }
+}
+```
+
+> 基于类初始化的解决方案
+
+```
+public class ClassInitLocking {
+    private static class InstanceHolder{
+        public static Student student = new Student();
+    }
+
+    public static Student getStuInstance(){
+        //这里将导致InstanceHolder类被初始化
+        //在执行类的初始化期间，JVM会去获取一个锁
+        return InstanceHolder.student;
+    }
+}
+```
+*对实例字段使用线程安全的延迟初始化，使用基于volatile的延迟初始化的方案；对静态字段使用线程安全的延迟初始化，使用基于类初始化的方案*
+
+
