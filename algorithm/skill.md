@@ -10,5 +10,3 @@ int SeqSearch(int r[],int n ,ing k){
     return i;
 }
 ```
-
-- 获取一个数字的
